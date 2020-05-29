@@ -93,22 +93,6 @@ func (c *Client) do(ctx context.Context, op operationType, v interface{}, variab
 		req  *http.Request
 		resp *http.Response
 	)
-	switch op {
-	case queryOperation:
-		if req, err = http.NewRequest("GET", c.url, nil); err != nil {
-			return err
-		}
-
-		var buf bytes.Buffer
-		err := json.NewEncoder(&buf).Encode(variables)
-		if err != nil {
-			return err
-		}
-		q := req.URL.Query()
-		q.Add("query", query)
-		q.Add("variables", buf.String())
-		req.URL.RawQuery = q.Encode()
-	case mutationOperation:
 		in := struct {
 			Query     string                 `json:"query"`
 			Variables map[string]interface{} `json:"variables,omitempty"`
@@ -117,14 +101,13 @@ func (c *Client) do(ctx context.Context, op operationType, v interface{}, variab
 			Variables: variables,
 		}
 		var buf bytes.Buffer
-		err := json.NewEncoder(&buf).Encode(in)
+		err = json.NewEncoder(&buf).Encode(in)
 		if err != nil {
 			return err
 		}
 		if req, err = http.NewRequest("POST", c.url, &buf); err != nil {
 			return err
 		}
-	}
 
 	// set cookies and headers
 	var k, val string
