@@ -1,14 +1,13 @@
 package graphql
 
 import (
-	"bytes"
-	"context"
-	"encoding/json"
-	"fmt"
-	"io/ioutil"
-	"net/http"
-
-	"github.com/Laisky/graphql/internal/jsonutil"
+  "bytes"
+  "context"
+  "encoding/json"
+  "fmt"
+  "github.com/awakeningbyte/graphql/internal/jsonutil"
+  "io/ioutil"
+  "net/http"
 )
 
 func defaultClientHeaders() map[string]string {
